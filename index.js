@@ -51,27 +51,46 @@ function FileWebpackPlugin(options) {
  */
 FileWebpackPlugin.prototype.apply = function(compiler) {
 
-    compiler.hooks.emit.tapAsync("emit", (compilation, callback) => {
+  	const emitHandler = (compilation, callback) => {
   		this.emitCallback && this.emitCallback();
 
   		this.processFiles(compiler, compilation, this.emitArray);
 	    callback();
-	});
+	};
 
+	if (compiler.plugin) {
+		compiler.plugin("emit", emitHandler);
+	} else {
+		compiler.hooks.emit.tapAsync("FileWebpackPlugin", emitHandler);
+	}
+  	
 
-  	// right after emit, files will be generated
-    compiler.hooks.afterEmit.tapAsync("after-emit", (compilation, callback) => {
-		this.afterEmitCallback && this.afterEmitCallback();
+	const afterEmitHandler = (compilation, callback) => {
+		this.emitCallback && this.emitCallback();
 		this.processFiles(compiler, compilation, this.afterEmitArray);
-	    callback();
-	});
+		callback();
+	};
+
+	// right after emit, files will be generated
+	if (compiler.plugin) {
+		compiler.plugin("after-emit", afterEmitHandler);
+	} else {
+		compiler.hooks.afterEmit.tapAsync("FileWebpackPlugin", afterEmitHandler);
+	}
+  	
 
 	// done
-	compiler.hooks.done.tap("done", () => {
-        this.doneCallback && this.doneCallback();
+	// const doneHandler = () => {
+    //     this.doneCallback && this.doneCallback();
 
-        this.processFiles(compiler, null, this.doneArray);
-	});
+    //     this.processFiles(compiler, null, this.doneArray);
+	// };
+
+	// if (compiler.plugin) {
+	// 	compiler.plugin("done", doneHandler);
+	// } else {
+	// 	compiler.hooks.done.tapAsync("FileWebpackPlugin", doneHandler);
+	// }
 
 };
 
