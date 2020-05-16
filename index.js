@@ -80,17 +80,17 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
   	
 
 	// done
-	// const doneHandler = () => {
-    //     this.doneCallback && this.doneCallback();
+	const doneHandler = () => {
+        this.doneCallback && this.doneCallback();
 
-    //     this.processFiles(compiler, null, this.doneArray);
-	// };
+        this.processFiles(compiler, null, this.doneArray);
+	};
 
-	// if (compiler.plugin) {
-	// 	compiler.plugin("done", doneHandler);
-	// } else {
-	// 	compiler.hooks.done.tapAsync("FileWebpackPlugin", doneHandler);
-	// }
+	if (compiler.plugin) {
+		compiler.plugin("done", doneHandler);
+	} else {
+		compiler.hooks.done.tapAsync("FileWebpackPlugin", doneHandler);
+	}
 
 };
 
