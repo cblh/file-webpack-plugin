@@ -89,7 +89,8 @@ FileWebpackPlugin.prototype.apply = function(compiler) {
 	if (compiler.plugin) {
 		compiler.plugin("done", doneHandler);
 	} else {
-		compiler.hooks.done.tapAsync("FileWebpackPlugin", doneHandler);
+		// FIXME: 启用会导致webpack compiler.run无法回调
+		// compiler.hooks.done.tapAsync("FileWebpackPlugin", doneHandler);
 	}
 
 };

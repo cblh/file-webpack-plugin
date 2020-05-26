@@ -1,5 +1,5 @@
 {
-  "name": "file-webpack-plugin",
+  "name": "@chenbeiliuhuo/file-webpack-plugin",
   "version": "2.0.0",
   "description": "offer extra file capacity for webpack",
   "main": "index.js",
